@@ -29,19 +29,28 @@ export interface TestResult {
   value: string;
   unit: string;
   normalRange: string;
+  status?: 'Normal' | 'Abnormal';
 }
 
 export interface DiagnosticCase {
-  id: string;
+  id: string; // Report Number
+  sampleId: string;
   ownerName: string;
+  ownerAddress?: string;
   mobile: string;
+  petName: string;
   animalType: string;
   breed: string;
   age: string;
   gender: 'Male' | 'Female';
+  weight?: string;
   testName: string;
+  sampleType: string;
   testResults: TestResult[];
   doctorName: string;
+  doctorRemarks?: string;
+  collectionDateTime: string;
+  reportDateTime: string;
   createdAt: string;
   status: 'Pending' | 'Completed';
 }

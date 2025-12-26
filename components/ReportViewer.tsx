@@ -24,10 +24,10 @@ const ReportViewer: React.FC<ReportViewerProps> = ({ report, onClose }) => {
               onClick={handlePrint}
               className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm flex items-center gap-2 shadow-lg shadow-blue-200 transition-all active:scale-95"
             >
-              <i className="fas fa-print"></i> Print as PDF / A4
+              <i className="fas fa-print"></i> Download/Print A4 PDF
             </button>
             <button className="px-6 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl font-bold text-sm flex items-center gap-2 hover:bg-gray-50 transition-colors shadow-sm">
-              <i className="fas fa-file-export"></i> Export CSV
+              <i className="fas fa-share-alt"></i> Send to Owner
             </button>
           </div>
           <button 
@@ -39,97 +39,122 @@ const ReportViewer: React.FC<ReportViewerProps> = ({ report, onClose }) => {
         </div>
 
         {/* Clinical Report Sheet */}
-        <div className="p-10 md:p-16 flex-1 print:p-0 bg-white" id="printable-report">
+        <div className="p-10 md:p-14 flex-1 print:p-0 bg-white" id="printable-report">
           
-          {/* Top Header - Clinical Brand */}
-          <div className="flex justify-between items-start border-b-2 border-gray-900 pb-8 mb-10">
-            <div className="flex items-center gap-6">
-              <div className="bg-gray-900 p-4 rounded-2xl">
+          {/* 1. LAB DETAILS (HEADER) */}
+          <div className="flex justify-between items-start border-b-4 border-gray-900 pb-8 mb-8">
+            <div className="flex items-center gap-5">
+              <div className="bg-gray-900 p-4 rounded-xl flex items-center justify-center">
                 <i className="fas fa-microscope text-white text-4xl"></i>
               </div>
               <div>
                 <h1 className="text-3xl font-black text-gray-900 tracking-tighter leading-none">VetiScan<span className="text-blue-600">AI</span></h1>
                 <p className="text-[10px] text-gray-500 font-black uppercase tracking-[0.4em] mt-2">Laboratory & Diagnostic Centre</p>
                 <div className="mt-3 text-[10px] text-gray-500 font-medium space-y-0.5">
-                  <p>ISO 9001:2015 Certified Diagnostic Facility</p>
+                  <p className="font-bold text-gray-700">Registration No: VET-LAB-2025-X01</p>
                   <p>123 Vet Med Parkway, Innovation District, CA 90210</p>
-                  <p>Web: www.vetiscan.ai | Tel: +1 (800) VETI-SCAN</p>
+                  <p>Tel: +1 (555) 123-4567 | Email: clinical@vetiscan.ai</p>
                 </div>
               </div>
             </div>
             <div className="text-right">
-              <div className="inline-block px-3 py-1 bg-blue-50 text-blue-700 text-[10px] font-black uppercase tracking-widest rounded mb-4 border border-blue-100">
-                Final Pathological Report
+              <div className="inline-block px-3 py-1 bg-gray-900 text-white text-[10px] font-black uppercase tracking-widest rounded mb-4">
+                CERTIFIED LABORATORY REPORT
               </div>
-              <h2 className="text-2xl font-black text-gray-900 mb-1">CLINICAL RECORD</h2>
-              <p className="text-xs font-mono font-bold text-blue-600 tracking-tight">SID: {report.id}</p>
-              <p className="text-[10px] text-gray-400 mt-1 font-bold">Reported on {report.createdAt}</p>
-            </div>
-          </div>
-
-          {/* Identification Block */}
-          <div className="grid grid-cols-2 gap-12 mb-10 bg-gray-50 p-6 rounded-2xl border border-gray-100">
-            <div className="space-y-3">
-              <h3 className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-2 border-b border-blue-100 pb-1">Patient Demographics</h3>
-              <div className="grid grid-cols-2 gap-2 text-xs">
-                <span className="text-gray-500 font-bold uppercase">Patient ID</span>
-                <span className="text-gray-900 font-black">PET-{Math.floor(Math.random() * 90000)}</span>
-                
-                <span className="text-gray-500 font-bold uppercase">Species/Breed</span>
-                <span className="text-gray-900 font-black">{report.animalType} / {report.breed}</span>
-                
-                <span className="text-gray-500 font-bold uppercase">Age / Sex</span>
-                <span className="text-gray-900 font-black">{report.age} / {report.gender}</span>
-              </div>
-            </div>
-            <div className="space-y-3">
-              <h3 className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-2 border-b border-blue-100 pb-1">Referral Information</h3>
-              <div className="grid grid-cols-2 gap-2 text-xs">
-                <span className="text-gray-500 font-bold uppercase">Client Name</span>
-                <span className="text-gray-900 font-black">{report.ownerName}</span>
-                
-                <span className="text-gray-500 font-bold uppercase">Contact No</span>
-                <span className="text-gray-900 font-black">{report.mobile}</span>
-                
-                <span className="text-gray-500 font-bold uppercase">Referring Vet</span>
-                <span className="text-gray-900 font-black">Dr. {report.doctorName}</span>
+              <div className="space-y-1">
+                <p className="text-xs font-mono font-bold text-blue-600">Report #: {report.id}</p>
+                <p className="text-xs font-mono font-bold text-gray-600">Sample ID: {report.sampleId}</p>
               </div>
             </div>
           </div>
 
-          {/* Test Investigation Body */}
-          <div className="mb-10">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="h-6 w-1.5 bg-blue-600 rounded-full"></div>
-              <h3 className="text-lg font-black text-gray-900">
-                Investigation: {report.testName}
+          {/* 2. OWNER & ANIMAL INFORMATION */}
+          <div className="grid grid-cols-2 gap-0 border border-gray-300 rounded-xl overflow-hidden mb-8">
+            <div className="p-5 border-r border-gray-300">
+              <h3 className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-3 flex items-center gap-2">
+                <i className="fas fa-user-alt text-[8px]"></i> Owner Details
               </h3>
+              <div className="space-y-2 text-xs">
+                <div className="flex justify-between"><span className="text-gray-400 font-bold uppercase text-[9px]">Owner Name:</span><span className="font-black text-gray-900">{report.ownerName}</span></div>
+                <div className="flex justify-between"><span className="text-gray-400 font-bold uppercase text-[9px]">Mobile No:</span><span className="font-bold text-gray-900">{report.mobile}</span></div>
+                <div className="flex flex-col mt-2 pt-2 border-t border-gray-100">
+                  <span className="text-gray-400 font-bold uppercase text-[9px] mb-1">Address:</span>
+                  <span className="text-gray-800 font-medium leading-tight">{report.ownerAddress || 'N/A'}</span>
+                </div>
+              </div>
+            </div>
+            <div className="p-5 bg-gray-50/50">
+              <h3 className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-3 flex items-center gap-2">
+                <i className="fas fa-dog text-[8px]"></i> Animal Details
+              </h3>
+              <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
+                <div className="flex flex-col"><span className="text-gray-400 font-bold uppercase text-[9px]">Pet Name</span><span className="font-black text-gray-900">{report.petName}</span></div>
+                <div className="flex flex-col"><span className="text-gray-400 font-bold uppercase text-[9px]">Animal Type</span><span className="font-black text-gray-900">{report.animalType}</span></div>
+                <div className="flex flex-col"><span className="text-gray-400 font-bold uppercase text-[9px]">Breed</span><span className="font-bold text-gray-900">{report.breed}</span></div>
+                <div className="flex flex-col"><span className="text-gray-400 font-bold uppercase text-[9px]">Age / Sex</span><span className="font-bold text-gray-900">{report.age} / {report.gender}</span></div>
+                <div className="flex flex-col col-span-2 mt-1 pt-1 border-t border-gray-100"><span className="text-gray-400 font-bold uppercase text-[9px]">Weight</span><span className="font-black text-blue-700">{report.weight} KG</span></div>
+              </div>
+            </div>
+          </div>
+
+          {/* 3. REPORT METADATA */}
+          <div className="grid grid-cols-4 gap-6 mb-8 text-[9px] font-black uppercase tracking-widest text-gray-400 border-b border-gray-100 pb-6">
+            <div className="flex flex-col gap-1">
+              <span>Collection Date/Time</span>
+              <span className="text-gray-900 text-[11px]">{report.collectionDateTime}</span>
+            </div>
+            <div className="flex flex-col gap-1">
+              <span>Report Date/Time</span>
+              <span className="text-gray-900 text-[11px]">{report.reportDateTime}</span>
+            </div>
+            <div className="flex flex-col gap-1">
+              <span>Sample Type</span>
+              <span className="text-gray-900 text-[11px]">{report.sampleType}</span>
+            </div>
+            <div className="flex flex-col gap-1 text-right">
+              <span>Referred By</span>
+              <span className="text-blue-600 text-[11px]">DR. {report.doctorName}</span>
+            </div>
+          </div>
+
+          {/* 4. TEST RESULTS TABLE */}
+          <div className="mb-10">
+            <div className="flex items-center justify-between mb-4 px-2">
+              <h3 className="text-lg font-black text-gray-900 flex items-center gap-3">
+                <span className="w-2 h-8 bg-blue-600 rounded-full"></span>
+                {report.testName}
+              </h3>
+              <div className="text-[10px] font-bold text-gray-400">Values in Metric Standard Units</div>
             </div>
             
-            <div className="border border-gray-200 rounded-2xl overflow-hidden">
+            <div className="border border-gray-300 rounded-xl overflow-hidden shadow-sm">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-gray-100 text-[10px] font-black text-gray-600 uppercase tracking-widest">
-                    <th className="px-6 py-4 border-b border-gray-200">Biochemical Parameter</th>
-                    <th className="px-6 py-4 border-b border-gray-200">Result / Unit</th>
-                    <th className="px-6 py-4 border-b border-gray-200 text-right">Reference Interval</th>
+                  <tr className="bg-gray-100 text-[10px] font-black text-gray-600 uppercase tracking-[0.2em]">
+                    <th className="px-6 py-4 border-b border-gray-300">Test Parameter</th>
+                    <th className="px-6 py-4 border-b border-gray-300">Observed Value</th>
+                    <th className="px-6 py-4 border-b border-gray-300">Unit</th>
+                    <th className="px-6 py-4 border-b border-gray-300 text-right">Biological Reference</th>
+                    <th className="px-6 py-4 border-b border-gray-300 text-center">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100">
+                <tbody className="divide-y divide-gray-200">
                   {report.testResults.map((res, i) => (
-                    <tr key={i} className="hover:bg-blue-50/30 transition-colors">
-                      <td className="px-6 py-5">
-                        <div className="font-bold text-gray-800 text-sm">{res.parameter}</div>
+                    <tr key={i} className={`${res.status === 'Abnormal' ? 'bg-red-50/50' : 'bg-white'} transition-colors`}>
+                      <td className="px-6 py-4">
+                        <div className="font-black text-gray-800 text-sm">{res.parameter}</div>
                       </td>
-                      <td className="px-6 py-5">
-                        <div className="flex items-baseline gap-1.5">
-                          <span className="font-black text-gray-900 text-base">{res.value}</span>
-                          <span className="text-[10px] text-gray-400 font-bold uppercase">{res.unit}</span>
-                        </div>
+                      <td className="px-6 py-4">
+                        <span className={`text-base font-black ${res.status === 'Abnormal' ? 'text-red-600' : 'text-gray-900'}`}>{res.value}</span>
                       </td>
-                      <td className="px-6 py-5 text-right">
-                        <span className="text-xs font-mono font-bold text-gray-500 bg-gray-50 px-2 py-1 rounded border border-gray-100">
-                          {res.normalRange}
+                      <td className="px-6 py-4 text-[10px] text-gray-500 font-black uppercase">{res.unit}</td>
+                      <td className="px-6 py-4 text-right">
+                        <span className="text-xs font-mono font-bold text-gray-500">{res.normalRange}</span>
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase inline-flex items-center gap-1 ${res.status === 'Abnormal' ? 'bg-red-600 text-white' : 'bg-green-600 text-white'}`}>
+                          {res.status === 'Abnormal' && <i className="fas fa-exclamation-triangle"></i>}
+                          {res.status}
                         </span>
                       </td>
                     </tr>
@@ -139,47 +164,58 @@ const ReportViewer: React.FC<ReportViewerProps> = ({ report, onClose }) => {
             </div>
           </div>
 
-          {/* Pathologist's Interpretation */}
-          <div className="grid grid-cols-3 gap-8 items-start mb-12">
-            <div className="col-span-2 bg-blue-50/30 p-6 rounded-2xl border border-blue-100">
-              <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] mb-2">Clinical Interpretation & Advice</h4>
-              <p className="text-xs text-blue-900 leading-relaxed font-medium italic">
-                Test results indicate standard biological variations for {report.animalType}. 
-                Correlate findings with physical examination and complete anamnesis. 
-                Values highlighted as outside reference intervals may require immediate re-evaluation 
-                or specialized imaging. This report is strictly for veterinary professional use.
-              </p>
+          {/* 5. DOCTOR SECTION */}
+          <div className="grid grid-cols-3 gap-8 mb-12">
+            <div className="col-span-2 space-y-4">
+              <div>
+                <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-2 flex items-center gap-2">
+                  <i className="fas fa-notes-medical"></i> Doctor Remarks & Interpretation
+                </h4>
+                <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 text-xs leading-relaxed text-gray-700 italic min-h-[100px]">
+                  {report.doctorRemarks || "Observations correlate with species-specific baseline. Clinical correlation advised. Review after 48 hours if symptomatic progression occurs."}
+                </div>
+              </div>
+              
+              <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100/50">
+                <p className="text-[9px] text-blue-800 font-bold leading-relaxed">
+                  <span className="font-black uppercase tracking-widest mr-2 underline">Disclaimer:</span> 
+                  This is a laboratory diagnostic report. Results should be interpreted by a licensed veterinarian in conjunction with full clinical history. Laboratory error risk is minimized via automated calibration but not zero.
+                </p>
+              </div>
             </div>
-            <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100 flex flex-col items-center justify-center">
-              <i className="fas fa-qrcode text-4xl text-gray-300 mb-2"></i>
-              <p className="text-[8px] text-gray-400 font-bold text-center uppercase tracking-widest">Scan to Verify Result Authenticity</p>
+
+            <div className="flex flex-col items-center justify-end text-center">
+              <div className="mb-2">
+                <img 
+                  src="https://cdn.pixabay.com/photo/2014/11/09/08/06/signature-523237_1280.png" 
+                  alt="Signature" 
+                  className="h-16 w-auto mix-blend-multiply opacity-80"
+                />
+              </div>
+              <div className="w-full border-b-2 border-gray-900 mb-2"></div>
+              <p className="text-sm font-black text-gray-900">DR. SARAH WILSON</p>
+              <p className="text-[9px] text-gray-400 font-black uppercase tracking-widest">Chief Clinical Pathologist</p>
+              <p className="text-[8px] text-gray-400 font-bold">Reg: VET-PATH-12903</p>
             </div>
           </div>
 
-          {/* Signatures Footer */}
-          <div className="mt-20 pt-8 border-t border-gray-100 flex justify-between items-end">
-            <div className="text-center group">
-              <div className="w-40 h-16 bg-[url('https://cdn.pixabay.com/photo/2014/11/09/08/06/signature-523237_1280.png')] bg-contain bg-no-repeat bg-center opacity-40 mix-blend-multiply mb-1 transition-opacity group-hover:opacity-100"></div>
-              <div className="w-48 border-b-2 border-gray-900 mb-3"></div>
-              <p className="text-sm font-black text-gray-900">Dr. Sarah Wilson, DVM, PhD</p>
-              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Senior Pathologist (Reg No: 12903-A)</p>
+          {/* 6. FOOTER */}
+          <div className="mt-auto pt-6 border-t border-gray-200 flex justify-between items-center text-gray-400">
+            <div className="text-[8px] font-black uppercase tracking-[0.2em] space-y-1">
+              <p>VetiScan AI Laboratory Management System (LMS) v2.5</p>
+              <p className="text-gray-300 italic">This is a software-generated diagnostic document. No physical seal is required for clinical validity.</p>
             </div>
-
-            <div className="text-right">
-              <p className="text-[9px] text-gray-300 font-bold uppercase tracking-[0.5em] mb-4">Official Diagnostic Document</p>
-              <div className="flex items-center gap-3 justify-end opacity-20 grayscale">
-                <i className="fas fa-certificate text-2xl"></i>
-                <i className="fas fa-vials text-2xl"></i>
-                <i className="fas fa-shield-virus text-2xl"></i>
+            <div className="flex items-center gap-4 grayscale opacity-30">
+              <i className="fas fa-qrcode text-3xl"></i>
+              <div className="text-right">
+                <p className="text-[7px] font-black">VALIDATE</p>
+                <p className="text-[7px] font-black">AUTHENTICITY</p>
               </div>
             </div>
           </div>
 
-          {/* Final Footer Line */}
-          <div className="mt-12 text-center">
-            <p className="text-[8px] text-gray-400 font-bold uppercase tracking-[0.5em] border-t border-gray-50 pt-4">
-              End of Report • VetiScan AI • System Timestamp: {new Date().getTime()}
-            </p>
+          <div className="text-center mt-6">
+            <span className="text-[9px] text-gray-300 font-black uppercase tracking-[0.5em]">End of Diagnostic Report</span>
           </div>
         </div>
       </div>
