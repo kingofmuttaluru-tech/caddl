@@ -1,0 +1,7 @@
+{
+  "name": "VetiScan AI Diagnostics",
+  "description": "A state-of-the-art veterinary diagnostic center featuring AI-powered symptom analysis, imaging services, and specialized laboratory testing for your pets.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
